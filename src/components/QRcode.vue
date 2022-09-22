@@ -56,14 +56,25 @@ export default {
       });
     },
 
+    dateTime(){
+      const today = new Date();
+      return `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
+    },
+
     async postRequest(qrcode) {
-      const data = await axios({
-        method: "post",
-        url: "https://script.google.com/macros/s/AKfycbwRP4d7RFgY2Z8yvUgwr9XGaopeCRxpq2qI5JGqW-X-SqQJpdJCMNmDzONfd-bEYjrDHQ/exec",
-        headers: {},
-        body: `2022/09/22, ${qrcode}`
-      });
-      console.log(data)
+      try {
+        const data = await axios({
+          method: "post",
+          url: "https://script.google.com/macros/s/AKfycbwRP4d7RFgY2Z8yvUgwr9XGaopeCRxpq2qI5JGqW-X-SqQJpdJCMNmDzONfd-bEYjrDHQ/exec",
+          headers: {
+            'Content-Type' : 'text/plain'
+          },
+          data: `${this.dateTime()}, ${qrcode}`
+        });
+        console.log(data);
+      } catch(e) {
+        console.error(e)
+      }
     }
   },
 };
