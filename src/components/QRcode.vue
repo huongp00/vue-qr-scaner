@@ -11,7 +11,8 @@
 
 <script>
 import { QrcodeStream } from "vue-qrcode-reader";
-// import axios from "axios";
+import axios from "axios";
+
 export default {
   name: "QRcode",
   components: { QrcodeStream },
@@ -35,6 +36,7 @@ export default {
 
     async onDecode(content) {
       this.result = content;
+      await this.postRequest(content);
       this.pause();
       await this.timeout(500);
       this.unpause();
@@ -53,6 +55,16 @@ export default {
         window.setTimeout(resolve, ms);
       });
     },
+
+    async postRequest(qrcode) {
+      const data = await axios({
+        method: "post",
+        url: "https://script.google.com/macros/s/AKfycbwRP4d7RFgY2Z8yvUgwr9XGaopeCRxpq2qI5JGqW-X-SqQJpdJCMNmDzONfd-bEYjrDHQ/exec",
+        headers: {},
+        body: `2022/09/22, ${qrcode}`
+      });
+      console.log(data)
+    }
   },
 };
 </script>
