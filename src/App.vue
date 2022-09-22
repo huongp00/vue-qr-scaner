@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <QRcode />
+  <h1> QR code </h1>
+  <QRcode />
   </div>
 </template>
 
