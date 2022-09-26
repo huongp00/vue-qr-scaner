@@ -6,6 +6,7 @@
         <img src="../assets/checkmark.svg" alt="Checkmark" width="128px" />
       </div>
     </qrcode-stream>
+    <div>{{ scanResults }}</div>
   </div>
 </template>
 
@@ -39,7 +40,7 @@ export default {
       this.pause();
       this.result = content;
       this.scanResults.push(content);
-      this.scanResults = [...new Set(this.scanResults)]
+      this.scanResults = [...new Set(this.scanResults)];
       if (!this.scanResults.some(res => res === content)) {
         this.postRequest(content);
       }
