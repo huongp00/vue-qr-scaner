@@ -24,12 +24,6 @@ export default {
       scanResults: [],
     };
   },
-  async created() {
-    const data = await this.getRequest();
-    if (data){
-      this.scanResults = data.map(item => item['QR Code']);
-    }
-  },
   methods: {
     async onInit(promise) {
       try {
@@ -49,7 +43,7 @@ export default {
       if (!this.scanResults.some(res => res === content)) {
         this.postRequest(content);
       }
-      await this.timeout(10);
+      await this.timeout(5);
       this.unpause();
     },
 
@@ -88,21 +82,6 @@ export default {
         return null;
       }
     },
-
-    async getRequest() {
-      try {
-        return (await axios({
-          method: 'get',
-          url: 'https://script.googleusercontent.com/macros/echo?user_content_key=V6Th2ArQPhnjoXe3QOg4QR_8h4fSzXKasVKVZVfhu_lxQyel0DJ6E7lNlTLMN7td0amoaywyoNFnW2-9knM9EbZWAGt7S9iAm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnCsULUPfdPv4qksQcSQPjOjYePTlf0cJ843IY3onPE_sgkRfz4tDcIDZjPLnG_SNfje4f1p54VuRajchcNFUwCodxCCxmMaYptz9Jw9Md8uu&lib=MMFGFZz0UdlWm1ZkzaQuczxmnJgeV1HvH',
-          headers: {
-            'Content-Type' : 'text/plain'
-          },
-        })).data;
-      } catch(e) {
-        console.error(e);
-        return null;
-      }
-    }
   },
 };
 </script>
