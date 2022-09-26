@@ -35,12 +35,12 @@ export default {
     },
 
     async onDecode(content) {
+      this.pause();
       if (content !== this.result) {
         this.postRequest(content)
       }
       this.result = content;
-      this.pause();
-      await this.timeout(200);
+      await this.timeout(50);
       this.unpause();
     },
 
