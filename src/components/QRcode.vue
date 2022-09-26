@@ -21,7 +21,14 @@ export default {
       camera: "auto",
       result: null,
       showScanConfirmation: false,
+      scanResults: [],
     };
+  },
+  async created() {
+    const data = await this.getRequest();
+    if (data){
+      this.scanResults = data.map(item => item['QR Code']);
+    }
   },
   methods: {
     async onInit(promise) {
@@ -36,11 +43,13 @@ export default {
 
     async onDecode(content) {
       this.pause();
-      if (content !== this.result) {
-        this.postRequest(content)
-      }
       this.result = content;
-      await this.timeout(50);
+      this.scanResults.push(content);
+      this.scanResults = [...new Set(this.scanResults)]
+      if (!this.scanResults.some(res => res === content)) {
+        this.postRequest(content);
+      }
+      await this.timeout(10);
       this.unpause();
     },
 
@@ -66,16 +75,32 @@ export default {
     async postRequest(qrcode) {
       try {
         const data = await axios({
-          method: "post",
-          url: "https://script.google.com/macros/s/AKfycbwRP4d7RFgY2Z8yvUgwr9XGaopeCRxpq2qI5JGqW-X-SqQJpdJCMNmDzONfd-bEYjrDHQ/exec",
+          method: 'post',
+          url: 'https://script.google.com/macros/s/AKfycbwRP4d7RFgY2Z8yvUgwr9XGaopeCRxpq2qI5JGqW-X-SqQJpdJCMNmDzONfd-bEYjrDHQ/exec',
           headers: {
             'Content-Type' : 'text/plain'
           },
           data: `${this.dateTime()}, ${qrcode}`
         });
-        console.log(data);
+        return data;
       } catch(e) {
-        console.error(e)
+        console.error(e);
+        return null;
+      }
+    },
+
+    async getRequest() {
+      try {
+        return (await axios({
+          method: 'get',
+          url: 'https://script.googleusercontent.com/macros/echo?user_content_key=V6Th2ArQPhnjoXe3QOg4QR_8h4fSzXKasVKVZVfhu_lxQyel0DJ6E7lNlTLMN7td0amoaywyoNFnW2-9knM9EbZWAGt7S9iAm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnCsULUPfdPv4qksQcSQPjOjYePTlf0cJ843IY3onPE_sgkRfz4tDcIDZjPLnG_SNfje4f1p54VuRajchcNFUwCodxCCxmMaYptz9Jw9Md8uu&lib=MMFGFZz0UdlWm1ZkzaQuczxmnJgeV1HvH',
+          headers: {
+            'Content-Type' : 'text/plain'
+          },
+        })).data;
+      } catch(e) {
+        console.error(e);
+        return null;
       }
     }
   },
