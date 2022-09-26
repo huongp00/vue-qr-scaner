@@ -91,6 +91,10 @@ export default {
   width: 100%;
   height: 100%;
 }
+.container > p {
+  width: auto;
+  word-break: break-word;
+}
 .scan-confirmation {
   position: absolute;
   width: 100%;
