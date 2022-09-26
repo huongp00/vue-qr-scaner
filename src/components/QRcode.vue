@@ -39,11 +39,11 @@ export default {
     async onDecode(content) {
       this.pause();
       this.result = content;
-      this.scanResults.push(content);
-      this.scanResults = [...new Set(this.scanResults)];
-      if (!this.scanResults.some(res => res === content)) {
+      if (!this.scanResults.some(res => res == content)) {
         this.postRequest(content);
       }
+      this.scanResults.push(content);
+      this.scanResults = this.scanResults.filter((item, i) => this.scanResults.indexOf(item) === i);
       await this.timeout(5);
       this.unpause();
     },
