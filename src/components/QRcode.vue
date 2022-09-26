@@ -36,11 +36,10 @@ export default {
 
     async onDecode(content) {
       if (content !== this.result) {
-        this.postRequest(content).then(() => {
-          console.log('OK')
-        });
+        this.postRequest(content)
       }
       this.result = content;
+      this.pause();
       await this.timeout(200);
       this.unpause();
     },
