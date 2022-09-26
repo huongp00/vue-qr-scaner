@@ -1,25 +1,24 @@
 <template>
-  <div>
-    <div v-if="result">last QR code: {{ result }}</div>
+  <div class="container">
+    <p v-if="result">last QR code: {{ result }}</p>
     <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
       <div v-show="showScanConfirmation" class="scan-confirmation">
         <img src="../assets/checkmark.svg" alt="Checkmark" width="128px" />
       </div>
     </qrcode-stream>
-    <div>{{ scanResults }}</div>
   </div>
 </template>
 
 <script>
-import { QrcodeStream } from "vue-qrcode-reader";
-import axios from "axios";
+import { QrcodeStream } from 'vue-qrcode-reader';
+import axios from 'axios';
 
 export default {
-  name: "QRcode",
+  name: 'QRcode',
   components: { QrcodeStream },
   data() {
     return {
-      camera: "auto",
+      camera: 'auto',
       result: null,
       showScanConfirmation: false,
       scanResults: [],
@@ -44,7 +43,7 @@ export default {
       }
       this.scanResults.push(content);
       this.scanResults = this.scanResults.filter((item, i) => this.scanResults.indexOf(item) === i);
-      await this.timeout(5);
+      await this.timeout(2);
       this.unpause();
     },
 
@@ -88,6 +87,10 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  width: 100%;
+  height: 100%;
+}
 .scan-confirmation {
   position: absolute;
   width: 100%;
